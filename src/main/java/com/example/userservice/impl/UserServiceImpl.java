@@ -1,6 +1,5 @@
 package com.example.userservice.impl;
 
-import com.example.userservice.Exception.ResourceNotFoundException;
 import com.example.userservice.entities.Hotel;
 import com.example.userservice.entities.Rating;
 import com.example.userservice.entities.User;
@@ -22,9 +21,9 @@ public class UserServiceImpl implements UserServices {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
     private HotelServices hotelServices;
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserServices {
     @Override
     public User getUser(int userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new ResourceNotFoundException("User with id not found in the server!! " + userId));
+                new RuntimeException("User with id not found in the server!! " + userId));
 
         Rating[] RatingsOfUser = restTemplate.getForObject("http://RATING-SERVICE/ratings/" + userId, Rating[].class);
         logger.info("Ratings: {}", RatingsOfUser);
@@ -50,9 +49,9 @@ public class UserServiceImpl implements UserServices {
         List<Rating> ratings = Arrays.stream(RatingsOfUser).toList();
 
         List<Rating> ratingList = ratings.stream().map(rating -> {
-            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://USER-SERVICES/users/" + rating.getHotelId(), Hotel.class);
+//            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://USER-SERVICES/users/" + rating.getHotelId(), Hotel.class);
             Hotel hotel = hotelServices.getHotel(rating.getHotelId());
-            logger.info("Response status code: {}", forEntity.getStatusCode());
+//            logger.info("Response status code: {}", forEntity.getStatusCode());
             rating.setHotel(hotel);
             return rating;
         }).collect(Collectors.toList());
