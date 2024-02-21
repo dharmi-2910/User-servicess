@@ -1,6 +1,8 @@
 package com.example.userservice;
 
+import com.example.userservice.entities.Rating;
 import com.example.userservice.external.services.RatingService;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,10 +14,19 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class UserServiceApplication {
 
+    @Test
     void contextLoad(){
     }
+
     @Autowired
     private RatingService ratingService;
+
+    @Test
+    void createRating(){
+        Rating rating=Rating.builder().rating(6).userId(1).hotel(2).feedback("this is created using feign client").build();
+        ratingService.createRating(rating);
+        System.out.println("rating created");
+    }
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
     }
