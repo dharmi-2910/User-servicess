@@ -19,7 +19,7 @@ public class UserServiceApplication {
 
     @Test
     void createRating() {
-        Rating rating = Rating.builder().rating(10).userId(1).hotelId(2).feedback("this is created using feign client").build();
+        Rating rating = Rating.builder().rating(String.valueOf(10)).userId(1).hotelId(2).feedback("this is created using feign client").build();
         ratingService.createRating(rating);
         System.out.println("rating created");
     }
