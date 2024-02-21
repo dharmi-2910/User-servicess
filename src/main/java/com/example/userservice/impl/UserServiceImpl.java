@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,11 +21,7 @@ public class UserServiceImpl implements UserServices {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
     private HotelServices hotelServices;
-
-    private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     private RatingService ratingService;
 
@@ -46,36 +41,12 @@ public class UserServiceImpl implements UserServices {
                 new RuntimeException("User with id not found in the server!! " + userId));
 
         List<Rating> ratings = ratingService.getRatingsByUserId(userId);
-
         List<Rating> ratingList = ratings.stream().map(rating -> {
             Hotel hotel = ratingService.getHotel(rating.getHotelId());
             rating.setHotel(hotel);
             return rating;
         }).collect(Collectors.toList());
-
         user.setRatings(ratingList);
         return user;
     }
 }
-
-    //    @Override
-//    public User getUser(int userId) {
-//        User user = userRepository.findById(userId).orElseThrow(() ->
-//                new RuntimeException("User with id not found in the server!! " + userId));
-//
-//        Rating[] RatingsOfUser = restTemplate.getForObject("http://RATING-SERVICE/ratings/" + userId, Rating[].class);
-//        logger.info("Ratings: {}", RatingsOfUser);
-//
-//        List<Rating> ratings = Arrays.stream(RatingsOfUser).toList();
-//
-//        List<Rating> ratingList = ratings.stream().map(rating -> {
-////            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://USER-SERVICES/users/" + rating.getHotelId(), Hotel.class);
-//            Hotel hotel = hotelServices.getHotel(rating.getHotelId());
-////            logger.info("Response status code: {}", forEntity.getStatusCode());
-//            rating.setHotel(hotel);
-//            return rating;
-//        }).collect(Collectors.toList());
-//
-//        user.setRatings(ratingList);
-//        return user;
-//    }
