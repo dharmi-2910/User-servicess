@@ -14,21 +14,17 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class UserServiceApplication {
 
-    @Test
-    void contextLoad(){
-    }
-
     @Autowired
     private RatingService ratingService;
 
     @Test
-    void createRating(){
-        Rating rating=Rating.builder().rating(6).userId(1).hotel(2).feedback("this is created using feign client").build();
+    void createRating() {
+        Rating rating = Rating.builder().rating(10).userId(1).hotelId(2).feedback("this is created using feign client").build();
         ratingService.createRating(rating);
         System.out.println("rating created");
     }
+
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
     }
-
 }
