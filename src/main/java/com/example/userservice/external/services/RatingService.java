@@ -14,16 +14,16 @@ public interface RatingService {
     @GetMapping("/ratings/user/{userId}")
     List<Rating> getRatingsByUserId(@PathVariable int userId);
 
-    @PostMapping("/ratings")
-    public Rating createRating(Rating values);
+//    @PostMapping("/ratings")
+//    public Rating createRating(Rating values);
+//
+//    @PutMapping("/ratings/{id}")
+//    public Rating updateRating(@PathVariable("id")int id, Rating rating);
+//
+//    @DeleteMapping("/ratings/{id}")
+//    public void deleteRating(@PathVariable int id);
 
-    @PutMapping("/ratings/{id}")
-    public Rating updateRating(@PathVariable("id")int id, Rating rating);
-
-    @DeleteMapping("/ratings/{id}")
-    public void deleteRating(@PathVariable int id);
-
-    @GetMapping("/ratings/hotels/{hotelId}")
-    Hotel getHotel(@PathVariable int hotelId);
+//    @GetMapping("/ratings/hotels/{hotelId}")
+//    Hotel getHotel(@PathVariable int hotelId);
 
 }
