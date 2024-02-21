@@ -7,20 +7,19 @@ import com.example.userservice.external.services.HotelServices;
 import com.example.userservice.external.services.RatingService;
 import com.example.userservice.repositories.UserRepository;
 import com.example.userservice.services.UserServices;
-import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserServices {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -46,42 +45,20 @@ public class UserServiceImpl implements UserServices {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new RuntimeException("User with id not found in the server!! " + userId));
 
-        try {
-            List<Rating> ratings = (List<Rating>) ratingFeignClient.getRatingsByUserId(user.getId());
+        Rating[] RatingsOfUser = restTemplate.getForObject("http://RATING-SERVICE/ratings/users/" + user.getId(), Rating[].class);
+        logger.info("Ratings: {}", RatingsOfUser);
 
-            List<Rating> ratingList = ratings.stream().map(rating -> {
-                Hotel hotel = ratingFeignClient.getHotel(rating.getHotelid());
-                rating.setHotel(hotel);
-                return rating;
-            }).collect(Collectors.toList());
+        List<Rating> ratings = Arrays.stream(RatingsOfUser).toList();
 
-            user.setRatings(ratingList);
-        } catch (FeignException ex) {
-           ex.getMessage();
-        }
+        List<Rating> ratingList = ratings.stream().map(rating -> {
+//            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://USER-SERVICES/users/" + rating.getHotelId(), Hotel.class);
+            Hotel hotel = hotelServices.getHotel(rating.getHotelid());
+//            logger.info("Response status code: {}", forEntity.getStatusCode());
+            rating.setHotel(hotel);
+            return rating;
+        }).collect(Collectors.toList());
+
+        user.setRatings(ratingList);
         return user;
     }
-
-
-//        @Override
-//    public User getUser(int userId) {
-//        User user = userRepository.findById(userId).orElseThrow(() ->
-//                new RuntimeException("User with id not found in the server!! " + userId));
-//
-//        Rating[] RatingsOfUser = restTemplate.getForObject("http://RATING-SERVICE/ratings/users/" + user.getId(), Rating[].class);
-//        logger.info("Ratings: {}", RatingsOfUser);
-//
-//        List<Rating> ratings = Arrays.stream(RatingsOfUser).toList();
-//
-//        List<Rating> ratingList = ratings.stream().map(rating -> {
-////            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://USER-SERVICES/users/" + rating.getHotelId(), Hotel.class);
-//            Hotel hotel = hotelServices.getHotel(rating.getHotelid());
-////            logger.info("Response status code: {}", forEntity.getStatusCode());
-//            rating.setHotel(hotel);
-//            return rating;
-//        }).collect(Collectors.toList());
-//
-//        user.setRatings(ratingList);
-//        return user;
-//    }
 }

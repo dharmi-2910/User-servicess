@@ -5,10 +5,9 @@ import com.example.userservice.entities.Rating;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Service
-@FeignClient(name="RATING-SERVICE")
+@FeignClient(name = "rating-services")
 public interface RatingService {
 
     @GetMapping("/ratings/user/{userId}")
@@ -16,17 +15,5 @@ public interface RatingService {
 
     @GetMapping("/ratings/hotels/{hotelId}")
     Hotel getHotel(int hotelid);
-
-//    @PostMapping("/ratings")
-//    public Rating createRating(Rating values);
-//
-//    @PutMapping("/ratings/{id}")
-//    public Rating updateRating(@PathVariable("id")int id, Rating rating);
-//
-//    @DeleteMapping("/ratings/{id}")
-//    public void deleteRating(@PathVariable int id);
-
-//    @GetMapping("/ratings/hotels/{hotelId}")
-//    Hotel getHotel(@PathVariable int hotelId);
 
 }
