@@ -7,7 +7,6 @@ import java.util.List;
 public  interface UserServices {
      User saveUser(User user);
     List<User> getAllUser();
-     User getUser(int userId, RatingService hotelService);
     User getUser(int userId);
 }
 
