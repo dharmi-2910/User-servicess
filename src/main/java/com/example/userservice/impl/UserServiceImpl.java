@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,20 +41,27 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public User getUser(int userId, RatingService hotelService) {
+        return null;
+    }
+
+    @Override
+    public User getUser(int userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new RuntimeException("User with id not found in the server!! " + userId));
 
-        List<Rating> ratings = hotelService.getRatingsByUserId(userId);
+        Rating[] RatingsOfUser = restTemplate.getForObject("http://RATING-SERVICE/ratings/" + userId, Rating[].class);
+        logger.info("Ratings: {}", RatingsOfUser);
+
+        List<Rating> ratings = Arrays.stream(RatingsOfUser).toList();
 
         List<Rating> ratingList = ratings.stream().map(rating -> {
-            Hotel hotel = hotelService.getHotel(rating.getHotelId());
+            Hotel hotel = hotelServices.getHotel(rating.getHotelId());
             rating.setHotel(hotel);
             return rating;
         }).collect(Collectors.toList());
-
         user.setRatings(ratingList);
         return user;
-    }    }
+    }}
 
     //    @Override
 //    public User getUser(int userId) {
