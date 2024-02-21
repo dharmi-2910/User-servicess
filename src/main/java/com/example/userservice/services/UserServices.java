@@ -1,7 +1,6 @@
 package com.example.userservice.services;
 
 import com.example.userservice.entities.User;
-import com.example.userservice.external.services.RatingService;
 import java.util.List;
 
 public  interface UserServices {
