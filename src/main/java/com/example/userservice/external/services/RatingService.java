@@ -12,7 +12,10 @@ import java.util.List;
 public interface RatingService {
 
     @GetMapping("/ratings/user/{userId}")
-    List<Rating> getRatingsByUserId(@PathVariable int userId);
+    Rating getRatingsByUserId(@PathVariable int userId);
+
+    @GetMapping("/ratings/hotels/{hotelId}")
+    Hotel getHotel(int hotelid);
 
 //    @PostMapping("/ratings")
 //    public Rating createRating(Rating values);

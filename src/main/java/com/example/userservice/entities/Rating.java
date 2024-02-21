@@ -11,11 +11,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class Rating {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ratingId;
-    private  int userId;
-    private  int hotelId;
+
+    private int ratingid;
+    private  int hotelid;
+    private  int userid;
     private  String  rating;
     private  String feedback;
 
