@@ -22,13 +22,13 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public ResponseEntity<User> getSingleUser(@PathVariable int userId){
-        User user=userServices.getUser(userId);
+        User user=userServices.getUser(userId, hotelService);
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("/users/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable int userId, @RequestBody User updatedUser) {
-        User user = userServices.getUser(userId);
+        User user = userServices.getUser(userId, getHotel);
         user.setId(updatedUser.getId());
         User updatedUserEntity = userServices.saveUser(user);
         return ResponseEntity.ok(updatedUserEntity);
