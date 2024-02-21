@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserServices {
     @Autowired
     private HotelServices hotelServices;
     @Autowired
-    private RatingService ratingFeignClient;
+    private RatingService ratingService;
 
     @Override
     public User saveUser(User user) {
@@ -45,15 +45,11 @@ public class UserServiceImpl implements UserServices {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new RuntimeException("User with id not found in the server!! " + userId));
 
-        Rating[] RatingsOfUser = restTemplate.getForObject("http://RATING-SERVICE/ratings/users/" + user.getId(), Rating[].class);
-        logger.info("Ratings: {}", RatingsOfUser);
-
-        List<Rating> ratings = Arrays.stream(RatingsOfUser).toList();
+        List<Rating> ratings = ratingService.getRatingsByUserId(user.getId());
+        logger.info("Ratings: {}", ratings);
 
         List<Rating> ratingList = ratings.stream().map(rating -> {
-//            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://USER-SERVICES/users/" + rating.getHotelId(), Hotel.class);
             Hotel hotel = hotelServices.getHotel(rating.getHotelid());
-//            logger.info("Response status code: {}", forEntity.getStatusCode());
             rating.setHotel(hotel);
             return rating;
         }).collect(Collectors.toList());

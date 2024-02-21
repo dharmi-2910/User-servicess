@@ -9,8 +9,6 @@ spring:
     url: jdbc:mysql://localhost:3306/microservices
     username: root
     password: dharmi2910
-    hikari:
-      data-source-properties:
 
   jpa:
     hibernate:
