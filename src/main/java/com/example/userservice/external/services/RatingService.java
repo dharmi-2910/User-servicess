@@ -23,4 +23,7 @@ public interface RatingService {
     @DeleteMapping("/ratings/{id}")
     public void deleteRating(@PathVariable int id);
 
+    @GetMapping("/ratings/hotels/{hotelId}")
+    Hotel getHotel(@PathVariable int hotelId);
+
 }
