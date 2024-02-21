@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserServices {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
     private HotelServices hotelServices;
     @Autowired
     private RatingService ratingService;
