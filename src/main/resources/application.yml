@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/microservices
     username: root
-    password: dharmi2910
+    password: ${abc.password}
 
   jpa:
     hibernate:
@@ -16,7 +16,7 @@ spring:
 
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: ${abc.dialect}
 
   config:
     import: optional:configserver:http://localhost:8086
