@@ -43,6 +43,9 @@ public class UserServiceImpl implements UserServices {
 
         List<Rating> ratings = ratingService.getRatingsByUserId(user.getId());
         logger.info("Ratings: {}", ratings);
+        logger.error("error info");
+        logger.warn("warn info");
+        logger.trace("trace info");
 
         List<Rating> ratingList = ratings.stream().map(rating -> {
             Hotel hotel = hotelServices.getHotel(rating.getHotelid());
