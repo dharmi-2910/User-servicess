@@ -17,8 +17,3 @@ spring:
     properties:
       hibernate:
         dialect: ${hibernate.dialect}
-logging:
-  level:
-    com:
-      example:
-        userservice: INFO
