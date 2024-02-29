@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,24 +29,24 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public User saveUser(User user) {
+        logger.info("Saving user: {}", user);
         return userRepository.save(user);
     }
 
     @Override
     public List<User> getAllUser() {
+        logger.info("Fetching all users");
         return userRepository.findAll();
     }
 
     @Override
     public User getUser(int userId) {
+        logger.info("Fetching user with id: {}", userId);
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new RuntimeException("User with id not found in the server!! " + userId));
 
         List<Rating> ratings = ratingService.getRatingsByUserId(user.getId());
         logger.info("Ratings: {}", ratings);
-        logger.error("error info");
-        logger.warn("warn info");
-        logger.trace("trace info");
 
         List<Rating> ratingList = ratings.stream().map(rating -> {
             Hotel hotel = hotelServices.getHotel(rating.getHotelid());
